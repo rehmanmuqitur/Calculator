@@ -40,6 +40,14 @@ public class CalculateServiceTest {
 		assertEquals(sum, 14);
 	}
 	
+	// Test Case - 4
+	@Test
+	public void shouldCalculateSumForDelimeteredEquation() {
+		
+		Integer sum = calcuateService.add("//;\n1;2;3;9");
+		assertEquals(sum, 15);
+	}
+	
 	// Test Case - 5-a
 	@Test(expected = NegetiveNumberPresentException.class)
 	public void shouldThrowExceptionIfNegativeNumberExists() {
@@ -72,6 +80,30 @@ public class CalculateServiceTest {
 		Integer sum = calcuateService.add("1,2,3,3000,2000,6");
 		
 		assertEquals(sum, 12);
+	}
+	
+	// Test Case - 7
+	@Test
+	public void shouldCalculateSumForLengthDelimeteredEquation() {
+		
+		Integer sum = calcuateService.add("//&&&\n1&&&2&&&3&&&10");
+		assertEquals(sum, 16);
+	}
+	
+	// Test Case - 8
+	@Test
+	public void shouldCalculateSumForMultipleDelimeteredEquation() {
+		
+		Integer sum = calcuateService.add("//*&%\n1*2&3%10");
+		assertEquals(sum, 16);
+	}
+	
+	//  Test Case - 9
+	@Test
+	public void shouldCalculateSumForLenthMutipleDelimeteredEquation() {
+		
+		Integer sum = calcuateService.add("//*&%\n1*&%2*&%3*&%11");
+		assertEquals(sum, 17);
 	}
 	
 }

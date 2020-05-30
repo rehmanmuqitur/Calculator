@@ -1,4 +1,5 @@
 package org.muqit.calculator.services;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +23,10 @@ public class CalcuateService {
 	
 	public Integer identifyNatureAndCaluclate(String equation) {
 		
-		if (equation.contains("-")) {
+		if(isDelimeteredContent(equation)) {
+			return calculateForDelimeters(equation);
+			
+		} else if (isNegetiveNumbersPresent(equation)) {
 			return handleNegetiveNumbers(equation);
 			
 		} else {
@@ -32,8 +36,15 @@ public class CalcuateService {
 		
 	}
 	
+	private boolean isDelimeteredContent(String equation) {
+		return equation.startsWith("//");
+	}
+	
+	private boolean isNegetiveNumbersPresent(String equation) {
+		return equation.contains("-");
+	}
+	
 	public Integer getSum(String[] numbers) {
-		
 		Integer sum = 0;
 		for(String num: numbers) {
 			Integer number = Integer.parseInt(num);
@@ -45,7 +56,7 @@ public class CalcuateService {
 	}
 	
 	private Integer handleNegetiveNumbers(String equation) throws NegetiveNumberPresentException {
-		
+	
 		StringBuilder sb = new StringBuilder();
 		Matcher matcher =  Pattern.compile(RejexConstants.NEGETIVE_NUMBERS_ONLY_REJEX).matcher(equation);
 		
@@ -63,4 +74,26 @@ public class CalcuateService {
 			throw new NegetiveNumberPresentException();
 		}
 	}
+	
+	private Integer calculateForDelimeters(String equation) {
+		
+		/*
+		 * so it is considered only valid(as described in question) input will be passed.
+		 * 
+		 * other wise multiple Rejex can used to verify input for eg full match on this Rejex: "//[^\\w]+\n([\\d]+[^\\w]+)+"  
+		 * could verify input: '//;;\n1;2;8;;88;;8" and reject input: "//;;\n1;2;8;;;88;;"
+		 */
+		
+		
+		/*
+		 * using Rejex: "[\\d]+" to get all Numbers from Input
+		 */
+		Integer sum = 0;
+		Matcher matcher =  Pattern.compile(RejexConstants.NUMBERS_ONLY_REJEX).matcher(equation);
+		while(matcher.find()) {
+			sum += Integer.parseInt(matcher.group());
+		}
+		return sum;
+	}
+	
 }
